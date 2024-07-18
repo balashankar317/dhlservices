@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="dhlservices" basedir="." default="init">
+    <property file="build.properties"/>
+
+    <path id="buildpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init" depends="clean,createdirs,compile,package"/>
+
+    <target name="clean">
+        <delete dir="${classes.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="createdirs">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="buildpath"/>
+    </target>
+
+    <target name="package">
+        <war destfile="${dist.dir}${file.separator}${ant.project.name}.war" webxml="${webinf.dir}/web.xml">
+            <fileset dir="${webcontent.dir}">
+                <include name="**/*.jsp"/>
+                <include name="**/*.html"/>
+                <include name="**/*.js"/>
+            </fileset>
+            <lib dir="${lib.dir}">
+                <include name="*.jar"/>
+            </lib>
+            <classes dir="${classes.dir}">
+                <include name="**/*.class"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+            </classes>            
+        </war>
+    </target>
+</project>
